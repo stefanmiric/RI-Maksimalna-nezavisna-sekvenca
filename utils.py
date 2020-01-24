@@ -41,3 +41,5 @@ def solutionValue(iteration, adj):
             solution.append(v)
     cardinality = len(solution)
     return solution, cardinality
+
+

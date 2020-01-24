@@ -3,6 +3,8 @@ import time
 from utils import create_graph, draw_graph, solutionValue
 import searches.annealing as an
 import searches.brute_force as bf
+import searches.halldorsson as hal
+import searches.genetic as gen
 
 # graph = nx.Graph()
 # graph.add_nodes_from([6, 8, 7, 3, 5, 2, 1, 9, 4])
@@ -18,15 +20,16 @@ graph = create_graph(nodes = 50, edges= 50)
 # print(n)
 # print(solution)
 start1 = time.time()
-
 solution, card = an.simulated_annealing_search(graph)
 end1 = time.time()
 
-# start2 = time.time()
-# bf.brute_force_search(graph)
-# end2 = time.time()
 
 print('solution1: {}\ncard: {}\n time:{}s'.format(solution, card, end1 - start1))
-# print('solution2: {}\ncard: {}\n time:{}s'.format(solution, card, end2 - start2))
+
+start2 = time.time()
+card2 = gen.genetic_search(graph)
+end2 = time.time()
+
+print('card: {}\n time:{}s'.format( card2, end2 - start2))
 
 draw_graph(graph)
