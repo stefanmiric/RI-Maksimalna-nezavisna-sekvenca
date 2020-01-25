@@ -3,6 +3,9 @@ import math
 from utils import solutionValue
 
 #kaze halldorsson n/log(n) skupova sa po log(n) elemenata
+#medjutim ovo ne funkcionise (osim ako ja nisam nesto pogresio)
+#probacu neki drugaciji pristup
+#vise elemenata
 
 def halldorsson(graph):
     best = list(graph.nodes)

@@ -1,7 +1,9 @@
 import random
 from utils import solutionValue
 
-def simulated_annealing_search(graph, iterations = 1000):
+
+#moguca popravka, nekako drugacije birati okolinu
+def simulated_annealing_search(graph, iterations = 100):
     best = list(graph.nodes)
     best_s, best_c = solutionValue(best, graph.adj)
     for i in range(1,iterations):

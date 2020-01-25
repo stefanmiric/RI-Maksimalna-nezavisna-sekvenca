@@ -22,9 +22,9 @@ def create_graph(edges = 10, nodes = 10):
     return graph
 
 
-def draw_graph(graph):
+def draw_graph(graph, result):
     plt.figure(figsize=(8, 8))
-    nx.draw(graph, with_labels=True)
+    nx.draw(graph, with_labels=True, node_color = [('red' if x in result else 'blue') for x in graph.nodes])
     plt.show()
 
 

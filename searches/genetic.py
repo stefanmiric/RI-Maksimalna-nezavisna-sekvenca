@@ -1,7 +1,8 @@
-from utils import *
+from utils import solutionValue
 import math
 import itertools
 import numpy as np
+import random
 
 
 class GeneticAlgorithm:
@@ -16,6 +17,7 @@ class GeneticAlgorithm:
         self._current_iteration = 0
         self._chromosome_length = len(self._nodes)
         self._best_chromosome = Chromosome(None, 0)
+        self._solution = []
 
     def optimize(self):
         chromosomes = self.initialize_population()
@@ -37,10 +39,10 @@ class GeneticAlgorithm:
             self._current_iteration += 1
             if self._current_iteration % 10 == 0:
                 print("Iteration %d " % self._current_iteration)
-                print("Best chromosome: ", chromosomes)
+                # print("Best chromosome: ", chromosomes)
 
-        print("Best is ", self._best_chromosome)
-        return self._best_chromosome
+        print("Best is ", self._solution)
+        return self._best_chromosome.content, self._best_chromosome.fitness
 
     def mutation(self, chromosome):
         t = random.random()
@@ -117,10 +119,11 @@ class GeneticAlgorithm:
 
 
     def fitness(self, permutation):
-        cardinality = solutionValue(permutation,self._graph.adj)[1]
+        sol, cardinality = solutionValue(permutation,self._graph.adj)
         if cardinality > self._best_chromosome.fitness:
             self._best_chromosome.fitness = cardinality
-            self._best_chromosome.content = permutation
+            self._best_chromosome.content = sol
+            self._solution = sol
         return cardinality
 
     def initialize_population(self):
