@@ -7,12 +7,12 @@ import random
 
 class GeneticAlgorithm:
 
-    def __init__(self, graph):
+    def __init__(self, graph, iter):
         self._graph = graph
         self._nodes = graph.nodes
 
-        self._iterations = 100
-        self._generation_size = 100
+        self._iterations = iter
+        self._generation_size = 50
         self._mutation_rate = 0.01
         self._current_iteration = 0
         self._chromosome_length = len(self._nodes)
@@ -20,13 +20,14 @@ class GeneticAlgorithm:
         self._solution = []
 
     def optimize(self):
+        #no elites
         chromosomes = self.initialize_population()
         new_gen = chromosomes
         while not self.stop_condition():
             chromosomes.sort(key=lambda chromo : chromo.fitness)
-            for i in range(30):
-                new_gen[i] = chromosomes[i]
-            for i in range(30,100,2):
+            # for i in range(30):
+            #     new_gen[i] = chromosomes[i]
+            for i in range(0,self._generation_size,2):
                 k1 = self.selection(chromosomes)
                 k2 = self.selection(chromosomes)
                 (child1, child2) = self.crossover(chromosomes[k1], chromosomes[k2])
@@ -63,59 +64,64 @@ class GeneticAlgorithm:
 
 
     def selection(self, population):
+        # tournament selection
         max = 0
         k = -1
-        for i in range(8):
-            j = random.randrange(100)
+        for _ in range(8):
+            j = random.randrange(self._generation_size)
             if population[j].fitness > max:
                 max = population[j].fitness
                 k = j
         return k
 
-    def crossover(self, parent1, parent2):
-        """order 1 crossover"""
 
+    def crossover(self, parent1, parent2):
+        #order 1 crossover
         parent1_content = parent1.content
         parent2_content = parent2.content
 
-        swath_size = random.randint(1, self._chromosome_length)
-        swath_pos = random.randint(0, self._chromosome_length - swath_size)
+        size = len(parent1_content)
+        child1, child2 = [-1] * size, [-1] * size
 
-        child1_content = parent1_content
-        child2_content = parent2_content
+        start, end = sorted([random.randrange(size) for _ in range(2)])
 
-        selected = [child1_content[i] for i in range(swath_pos, swath_pos + swath_size)]
-        order = []
-        for k in range(0, self._chromosome_length):
-            if parent2_content[k] in selected:
-                selected.remove(parent2_content[k])
-            else:
-                order.append(parent2_content[k])
-        for i in range(self._chromosome_length):
-            if swath_pos <= i < swath_pos + swath_size:
+        child1_inherited = []
+        child2_inherited = []
+        for i in range(start, end + 1):
+            child1[i] = parent1_content[i]
+            child2[i] = parent2_content[i]
+            child1_inherited.append(parent1_content[i])
+            child2_inherited.append(parent2_content[i])
+        currentp1 , currentp2 = 0, 0
+        fixed_pos = list(range(start, end+1))
+        i=0
+        while i < size:
+            if i in fixed_pos:
+                i+=1
                 continue
-            next = order.pop(0)
-            child1_content[i] = next
+            test_c1 = child1[i]
+            test_c2 = child2[i]
+            if test_c1 == -1:
+                p2_trait = parent2_content[currentp2]
+                while p2_trait in child1_inherited:
+                    currentp2 +=1
+                    p2_trait = parent2_content[currentp2]
+                child1[i] = p2_trait
+                child1_inherited.append(p2_trait)
+
+            if test_c2 == -1:
+                p1_trait = parent1_content[currentp1]
+                while p1_trait in child2_inherited:
+                    currentp1 +=1
+                    p1_trait = parent1_content[currentp1]
+                child2[i] = p1_trait
+                child2_inherited.append(p1_trait)
+
+            i+=1
+        return (Chromosome(child1, self.fitness(child1)), Chromosome(child2, self.fitness(child2))
+)
 
 
-
-        selected = [child2_content[i] for i in range(swath_pos, swath_pos + swath_size)]
-        order = []
-        for k in range(0, self._chromosome_length):
-            if parent1_content[k] in selected:
-                selected.remove(parent1_content[k])
-            else:
-                order.append(parent1_content[k])
-        for i in range(self._chromosome_length):
-            if swath_pos <= i < swath_pos + swath_size:
-                continue
-            next = order.pop(0)
-            child2_content[i] = next
-
-
-        child1 = Chromosome(child1_content, self.fitness(child1_content))
-        child2 = Chromosome(child2_content, self.fitness(child2_content))
-        return (child1, child2)
 
 
     def fitness(self, permutation):
@@ -128,11 +134,10 @@ class GeneticAlgorithm:
 
     def initialize_population(self):
         init = []
-        for i in range(self._generation_size):
+        for _ in range(self._generation_size):
             ins = np.random.permutation(self._nodes).tolist()
             init.append(Chromosome(ins, self.fitness(ins)))
         return init
-
 
     def stop_condition(self):
         return self._current_iteration > self._iterations
@@ -148,5 +153,5 @@ class Chromosome:
     def __repr__(self):
         return f"{self.content}\n{self.fitness}"
 
-def genetic_search(graph):
-    return GeneticAlgorithm(graph).optimize()
+def genetic_search(graph, iterations = 50):
+    return GeneticAlgorithm(graph, iterations).optimize()

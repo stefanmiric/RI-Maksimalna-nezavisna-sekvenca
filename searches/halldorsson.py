@@ -18,7 +18,7 @@ def halldorsson(graph):
     best_c = 0
     best_s = []
     subset = []
-    for i in range(0,subsets):
+    for _ in range(0,subsets):
         subset = random.sample(best, num_of_elements)
         print(subset)
         curr_s, curr_c = solutionValue(subset, adj)
