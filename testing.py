@@ -98,7 +98,7 @@ def avg_results(functions, edges=10, nodes=10, iterations=10):
     minor_ticks = np.arange(0, max(averages) + 1, 1)
     ax.set_yticks(major_ticks)
     ax.set_yticks(minor_ticks, minor=True)
-    plt.legend(list(map(lambda f: f.__name__ + ' ' + str(_averages[f.__name__]), functions)), loc='upper center', bbox_to_anchor=(0.5, 0))
+    plt.legend(list(map(lambda f: f.__name__ + ' ' + str(_averages[f.__name__]), functions)), loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)
     plt.tick_params(axis='x', bottom=False, labelbottom=False)
     plt.title('Average for {} nodes and {} edges in {} iterations\n'.format(nodes, edges, iterations))
     plt.show()
@@ -110,7 +110,7 @@ def plot_results(function, edges= 10, nodes= 10, iterations = 100):
     # graph = create_graph(edges, nodes)
     for i in range(0,iterations):
         print(i)
-        # graph = create_graph(edges, nodes)
+        graph = create_graph(edges, nodes)
         results.append(function(graph)[1])
 
     plt.figure(figsize=(12, 6))
@@ -135,7 +135,7 @@ def plot_results_by_iter(function, edges= 10, nodes= 10, iterations = 100):
     ax = plt.subplot(111)
     ax.plot(range(1,iterations + 1), results)
     plt.grid(True, which='both', axis='y', zorder=0, alpha=1)
-    major_ticks = np.arange(min(results)-1, max(results)+1, 1)
+    major_ticks = np.arange(min(results)-2, max(results)+2, 1)
     ax.set_yticks(major_ticks)
     ax.set_label(function.__name__)
     plt.title("{} - Results by iterations \n{} nodes / {} edges".format(function.__name__, nodes, edges))
