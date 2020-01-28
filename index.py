@@ -5,12 +5,12 @@ import searches.halldorsson as hal
 import searches.genetic as gen
 
 
-# test(hal.halldorsson, nodes = 100, edges = 100, draw= False)
+# test(gen.genetic_search, nodes = 100, edges = 100, draw= False)
 # test(an.simulated_annealing_search, nodes=100, edges= 100, draw=False)
 
-# compare(an.simulated_annealing_search_sort, gen.genetic_search ,edges=50,nodes=50)
+# compare(gen.genetic_search, an.simulated_annealing_search_sort ,edges=10,nodes=10)
 
-avg_results([an.simulated_annealing_search,an.simulated_annealing_search_slow, an.simulated_annealing_search_sort, gen.genetic_search], nodes = 200, edges=300, iterations= 100)
+avg_results([an.simulated_annealing_search,gen.genetic_search], nodes = 10, edges=10, iterations= 100)
 # plot_results_by_iter(gen.genetic_search,edges= 50, nodes=50, iterations=100)
 
 # test(an.simulated_annealing_search,nodes=50,edges=50)

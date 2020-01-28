@@ -153,5 +153,5 @@ class Chromosome:
     def __repr__(self):
         return f"{self.content}\n{self.fitness}"
 
-def genetic_search(graph, iterations = 50):
+def genetic_search(graph, iterations = 10):
     return GeneticAlgorithm(graph, iterations).optimize()
