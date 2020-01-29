@@ -68,7 +68,7 @@ def compare(f1, f2, edges=10, nodes=10, iterations=100):
     print(results)
 
 
-def avg_results(functions, edges=10, nodes=10, iterations=10):
+def avg_results(functions, edges=10, nodes=10, iterations=100):
     results = {}
     sums = {}
     for f in functions:
